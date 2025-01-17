@@ -5,6 +5,10 @@ from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
 from webdriver_manager.chrome import ChromeDriverManager
 
+from tqdm import tqdm
+
+
+
 def check_link_status(link):
     """
     Verifica se um link é válido com base no status HTTP.
@@ -81,7 +85,7 @@ def generate_html(links_status):
                 background-color: #f4f4f4;
             }
             img {
-                width: 50px;
+                width: 500px;
                 height: auto;
             }
         </style>
@@ -129,10 +133,9 @@ def main():
     # Verifica o status HTTP de cada link
     links_status = []
     print("\nVerificando status HTTP dos links encontrados:")
-    for link in sorted(unique_links):  # Ordena os links para facilitar a leitura
+    for link in tqdm(sorted(unique_links), desc="Verificando links", unit="link"):
         status = check_link_status(link)
         links_status.append((link, status))
-        print(f"Link: {link} - Status: {status}")
 
     # Gera o HTML com os links, status e imagens
     generate_html(links_status)
